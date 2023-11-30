@@ -11,8 +11,6 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Reading in and cleaning the data.
 
-
-
 ```{r cars}
 library(tidyverse)
 library(magrittr)
@@ -27,16 +25,24 @@ homocides <- read_csv(file = "data-raw/homicide-data.csv")%>%
   group_by(year, month) %>% count() %>%  
   mutate(date = make_date(year, month)) %>% 
    mutate(season = ifelse(month >= 5, "summer", ifelse (month <=10, "winter")))
-
-
+Arrest_of_Freddie <- homocides %>% filter(date == "2015-04-01")
 ```
 
-## Including Plots
+## Generating the plot
 
-You can also embed plots, for example:
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r Baltimore, echo=TRUE}
+ggplot(homocides, aes(x = date, y = n)) +
+ geom_bar(aes(fill = season),stat = "identity")  +
+  geom_vline(xintercept = as.numeric(as.Date("2015-04-01")), 
+                        color = "red", size = 0.7, linetype = "dashed" )  + 
+  geom_smooth( method = 'loess', se = FALSE, span = 0.1) +
+    scale_fill_manual(values=c("grey","lightblue")) +
+  labs(title = "Homicides in Baltimore, MD", x = "Date", y = "Monthly homicides") +
+  geom_text(data = Arrest_of_Freddie, aes(label = "Arrest of Freddie Gray"),
+            color = "red",  hjust = 1.05, vjust = -8) +
+  theme_dark() + 
+  theme(legend.position="bottom") + 
+  theme(legend.title=element_blank())
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
