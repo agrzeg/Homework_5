@@ -36,7 +36,7 @@ Arrest_of_Freddie <- homocides %>% filter(date == "2015-04-01")
 ## Including Plots
 
 
-```{r fig.height = 5, fig.width = 8}
+```{r fig.height = 4, fig.width = 9}
 ggplot(homocides, aes(x = date, y = n)) +
  geom_bar(aes(fill = season),stat = "identity")  +
   geom_vline(xintercept = as.numeric(as.Date("2015-04-01")), 
